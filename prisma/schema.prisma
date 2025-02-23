@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//Tabelas
+model Restaurant {
+  id             String         @id @default(uuid())
+  name           String
+  slug           String
+  description    String
+  avatarImageUrl String
+  coverImageUrl  String
+  createdAt      DateTime       @default(now()) //Momento Atual
+  updatedAt      DateTime       @updatedAt
+  menuCategories MenuCategory[] //Esse restaurante tem várias categorias de menu
+  products       Product[]
+  orders         Order[]
+}
+
+model MenuCategory {
+  id           String     @id @default(uuid())
+  name         String
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id]) //Não vai ser salvo na tabela, apenas referencia para o prisma a relação da tabela
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  products     Product[]
+}
+
+model Product {
+  id             String         @id @default(uuid())
+  name           String
+  description    String
+  price          Float
+  imageUrl       String
+  ingredients    String[]
+  restaurant     Restaurant     @relation(fields: [restaurantId], references: [id])
+  restaurantId   String
+  menuCategory   MenuCategory   @relation(fields: [menuCategoryId], references: [id])
+  menuCategoryId String
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  orderProducts  OrderProduct[]
+}
+
+model Order {
+  id                Int               @id @default(autoincrement())
+  total             Float
+  status            OrderStatus
+  consupmtionMethod ConsumptionMethod
+  orderProducts     OrderProduct[]
+  restaurant        Restaurant        @relation(fields: [restaurantId], references: [id])
+  restaurantId      String
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+}
+
+//Tabelas de Relacionamento
+model OrderProduct {
+  id        String   @id @default(uuid())
+  orderId   Int
+  order     Order    @relation(fields: [orderId], references: [id]) //Relações
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//Conjunto de Valores
+enum OrderStatus {
+  PENDING
+  IN_PREPARATION
+  FINISHED
+}
+
+enum ConsumptionMethod {
+  TAKEAWAY
+  DINE_IN
+}
+
+
+//Conectar o Banco ao Postgres com o NEON DB
+//Depois que configurar o banco deve fazer o Migration
+//npx prisma migrate dev
+
