@@ -1,2 +1,8 @@
 -Toda pasta que estiver dentro da pasta App em Src e dentro desta pasta que vc colocou dentro da pasta App tiver um
 arquivo chamado page.tsx
+
+-Globals vc configura as cores padrões do seu projeto
+
+- Layout é o que vai ter de igual em todas as paginas do seu projeto
+
+-Components é o Download dos seus componentes para estilização 

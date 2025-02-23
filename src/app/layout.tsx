@@ -8,7 +8,7 @@ const poppins = Poppins({
 });
 
 export const meta: Metadata = {
-  title: "My App",
+  title: "FSW Donalds",
   description: "My app description",
 };
 
