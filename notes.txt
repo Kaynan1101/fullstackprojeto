@@ -1,0 +1,2 @@
+-Toda pasta que estiver dentro da pasta App em Src e dentro desta pasta que vc colocou dentro da pasta App tiver um
+arquivo chamado page.tsx
