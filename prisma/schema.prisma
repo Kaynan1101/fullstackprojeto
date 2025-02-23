@@ -32,7 +32,7 @@ model MenuCategory {
   id           String     @id @default(uuid())
   name         String
   restaurantId String
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id]) //Não vai ser salvo na tabela, apenas referencia para o prisma a relação da tabela
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade) //Não vai ser salvo na tabela, apenas referencia para o prisma a relação da tabela
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   products     Product[]
@@ -45,9 +45,9 @@ model Product {
   price          Float
   imageUrl       String
   ingredients    String[]
-  restaurant     Restaurant     @relation(fields: [restaurantId], references: [id])
+  restaurant     Restaurant     @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   restaurantId   String
-  menuCategory   MenuCategory   @relation(fields: [menuCategoryId], references: [id])
+  menuCategory   MenuCategory   @relation(fields: [menuCategoryId], references: [id], onDelete: Cascade)
   menuCategoryId String
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
@@ -59,8 +59,8 @@ model Order {
   total             Float
   status            OrderStatus
   consupmtionMethod ConsumptionMethod
-  orderProducts     OrderProduct[]
-  restaurant        Restaurant        @relation(fields: [restaurantId], references: [id])
+  orderProducts     OrderProduct[]                                                        //Se deletar o restaurante deleta seus vinculos
+  restaurant        Restaurant        @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   restaurantId      String
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
@@ -70,9 +70,9 @@ model Order {
 model OrderProduct {
   id        String   @id @default(uuid())
   orderId   Int
-  order     Order    @relation(fields: [orderId], references: [id]) //Relações
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade) //Relações
   productId String
-  product   Product  @relation(fields: [productId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   quantity  Int
   price     Float
   createdAt DateTime @default(now())
@@ -95,4 +95,5 @@ enum ConsumptionMethod {
 //Conectar o Banco ao Postgres com o NEON DB
 //Depois que configurar o banco deve fazer o Migration
 //npx prisma migrate dev
+//Toda vez que mudar o banco de dados deve fazer o Migration
 
