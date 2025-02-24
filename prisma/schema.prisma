@@ -17,7 +17,7 @@ datasource db {
 model Restaurant {
   id             String         @id @default(uuid())
   name           String
-  slug           String
+  slug           String         @unique
   description    String
   avatarImageUrl String
   coverImageUrl  String
@@ -59,7 +59,7 @@ model Order {
   total             Float
   status            OrderStatus
   consupmtionMethod ConsumptionMethod
-  orderProducts     OrderProduct[]                                                        //Se deletar o restaurante deleta seus vinculos
+  orderProducts     OrderProduct[] //Se deletar o restaurante deleta seus vinculos
   restaurant        Restaurant        @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   restaurantId      String
   createdAt         DateTime          @default(now())
@@ -91,9 +91,7 @@ enum ConsumptionMethod {
   DINE_IN
 }
 
-
 //Conectar o Banco ao Postgres com o NEON DB
 //Depois que configurar o banco deve fazer o Migration
 //npx prisma migrate dev
 //Toda vez que mudar o banco de dados deve fazer o Migration
-

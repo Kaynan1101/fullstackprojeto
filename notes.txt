@@ -6,3 +6,6 @@ arquivo chamado page.tsx
 - Layout é o que vai ter de igual em todas as paginas do seu projeto
 
 -Components é o Download dos seus componentes para estilização 
+
+-Para receber parametros da rede deve colocar a pasta entre colchetes
+-SErver Components não pode interatividade
